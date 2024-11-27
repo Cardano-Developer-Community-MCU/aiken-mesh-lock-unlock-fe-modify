@@ -10,8 +10,6 @@ import {
   MeshTxBuilder,
 } from "@meshsdk/core";
 import { applyParamsToScript } from "@meshsdk/core-csl";
-import dotenv from "dotenv";
-dotenv.config();
 
 // Integrasi smart-contract
 import contractBlueprint from "../../../aiken-workspace/plutus.json";
@@ -64,9 +62,11 @@ export default function Lock() {
     // Membuat draft transaksi
     const txBuild = new MeshTxBuilder({
       fetcher: nodeProvider,
-      submitter: nodeProvider,
+      evaluator: nodeProvider,
+      verbose: true,
     });
     const txDraft = await txBuild
+      .setNetwork("preprod")
       .txOut(scriptAddr, assets)
       .txOutDatumHashValue(mConStr0([signerHash]))
       .changeAddress(walletAddress)

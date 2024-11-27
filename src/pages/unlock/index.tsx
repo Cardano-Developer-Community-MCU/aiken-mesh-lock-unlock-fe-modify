@@ -10,8 +10,6 @@ import {
   MeshTxBuilder,
 } from "@meshsdk/core";
 import { applyParamsToScript } from "@meshsdk/core-csl";
-import dotenv from "dotenv";
-dotenv.config();
 
 // Integrasi smart-contract
 import contractBlueprint from "../../../aiken-workspace/plutus.json";
@@ -64,9 +62,11 @@ export default function Home() {
     // Membuat draft transaksi
     const txBuild = new MeshTxBuilder({
       fetcher: nodeProvider,
-      submitter: nodeProvider,
+      evaluator: nodeProvider,
+      verbose: true,
     });
     const txDraft = await txBuild
+      .setNetwork("preprod")
       .spendingPlutusScript("V3")
       .txIn(
         utxo.input.txHash,
@@ -158,7 +158,7 @@ export default function Home() {
             <input
               className="border border-white rounded-lg bg-slate-700 px-3 py-2 w-1/3"
               type="text"
-              placeholder="Masukan Reference Number"
+              placeholder="Masukan Reference Number (17925)"
               onChange={redeemerHandler}
             />
           </div>
